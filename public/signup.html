@@ -1,0 +1,24 @@
+<form id="signupForm">
+<input id="username" placeholder="Username">
+<input id="firstname" placeholder="First name">
+<input id="lastname" placeholder="Last name">
+<input id="password" type="password">
+<button>Signup</button>
+</form>
+
+<script>
+document.getElementById("signupForm").onsubmit = async (e)=>{
+ e.preventDefault();
+ await fetch("/signup", {
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body: JSON.stringify({
+     username: username.value,
+     firstname: firstname.value,
+     lastname: lastname.value,
+     password: password.value
+   })
+ });
+ alert("Signup complete!");
+}
+</script>
