@@ -1,0 +1,48 @@
+<select id="room">
+<option>devops</option>
+<option>AI</option>
+<option>covid19</option>
+<option>sports</option>
+<option>Movies</option>
+</select>
+
+<button onclick="joinRoom()">Join</button>
+
+<div id="chat"></div>
+<input id="msg">
+<button onclick="sendMsg()">Send</button>
+
+<p id="typing"></p>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket = io();
+let username = localStorage.getItem("user");
+let currentRoom;
+
+function joinRoom(){
+  currentRoom = room.value;
+  socket.emit("joinRoom", currentRoom);
+}
+
+function sendMsg(){
+  socket.emit("chatMessage", {
+    from_user: username,
+    room: currentRoom,
+    message: msg.value
+  });
+  msg.value="";
+}
+
+msg.oninput = () => {
+  socket.emit("typing", { room: currentRoom, username });
+};
+
+socket.on("message", (data)=>{
+  chat.innerHTML += `<p>${data.from_user}: ${data.message}</p>`;
+});
+
+socket.on("typing", (user)=>{
+  typing.innerText = user + " is typing...";
+});
+</script>
