@@ -1,0 +1,19 @@
+<form id="loginForm">
+<input id="username">
+<input id="password" type="password">
+<button>Login</button>
+</form>
+
+<script>
+document.getElementById("loginForm").onsubmit = async (e)=>{
+ e.preventDefault();
+ let res = await fetch("/login", {
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body: JSON.stringify({ username: username.value, password: password.value })
+ });
+ let data = await res.json();
+ localStorage.setItem("user", data.username);
+ window.location = "chat.html";
+}
+</script>
