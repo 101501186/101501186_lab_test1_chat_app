@@ -5,6 +5,9 @@
 </head>
 <body>
   <h1>Welcome, <span id="user"></span></h1>
+
+  <button id="logoutBtn" style="float: right;">Logout</button>
+
   <h2>Select a Room to Join</h2>
 
   <div id="rooms">
@@ -16,20 +19,31 @@
   </div>
 
   <script>
-    // Display logged-in username
+    // Get logged-in username
     const user = localStorage.getItem("user");
+
+    // If not logged in, redirect to login
     if (!user) {
       alert("Please login first");
       window.location.href = "login.html";
     }
+
+    // Display username
     document.getElementById("user").innerText = user;
 
+    // Logout functionality
+    document.getElementById("logoutBtn").onclick = () => {
+      localStorage.removeItem("user"); // Clear user session
+      localStorage.removeItem("room"); // Clear selected room
+      window.location.href = "login.html"; // Redirect to login
+    };
+
+    // Join room function
     function joinRoom(room) {
-      // Store selected room
-      localStorage.setItem("room", room);
-      // Redirect to chat page
-      window.location.href = "chat.html";
+      localStorage.setItem("room", room); // Store selected room
+      window.location.href = "chat.html"; // Redirect to chat page
     }
   </script>
 </body>
 </html>
+
