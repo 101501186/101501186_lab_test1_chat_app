@@ -1,48 +1,76 @@
-<select id="room">
-<option>devops</option>
-<option>AI</option>
-<option>covid19</option>
-<option>sports</option>
-<option>Movies</option>
-</select>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat Room</title>
+</head>
+<body>
+  <h1>Welcome, <span id="username"></span></h1>
+  <h2>Room: <span id="roomName"></span></h2>
+  <button onclick="leaveRoom()">Leave Room</button>
 
-<button onclick="joinRoom()">Join</button>
+  <div id="chat" style="border:1px solid #000; height:300px; overflow-y:scroll; margin-top:10px; padding:5px"></div>
 
-<div id="chat"></div>
-<input id="msg">
-<button onclick="sendMsg()">Send</button>
+  <input id="msg" placeholder="Type a message">
+  <button onclick="sendMsg()">Send</button>
 
-<p id="typing"></p>
+  <p id="typing"></p>
 
-<script src="/socket.io/socket.io.js"></script>
-<script>
-const socket = io();
-let username = localStorage.getItem("user");
-let currentRoom;
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Get logged-in user and selected room from localStorage
+    const username = localStorage.getItem("user");
+    const currentRoom = localStorage.getItem("room");
 
-function joinRoom(){
-  currentRoom = room.value;
-  socket.emit("joinRoom", currentRoom);
-}
+    if (!username || !currentRoom) {
+      alert("You must login and select a room first");
+      window.location.href = "login.html";
+    }
 
-function sendMsg(){
-  socket.emit("chatMessage", {
-    from_user: username,
-    room: currentRoom,
-    message: msg.value
-  });
-  msg.value="";
-}
+    document.getElementById("username").innerText = username;
+    document.getElementById("roomName").innerText = currentRoom;
 
-msg.oninput = () => {
-  socket.emit("typing", { room: currentRoom, username });
-};
+    const socket = io();
 
-socket.on("message", (data)=>{
-  chat.innerHTML += `<p>${data.from_user}: ${data.message}</p>`;
-});
+    // Join the selected room
+    socket.emit("joinRoom", currentRoom);
 
-socket.on("typing", (user)=>{
-  typing.innerText = user + " is typing...";
-});
-</script>
+    // Send message
+    const msgInput = document.getElementById("msg");
+    const chatDiv = document.getElementById("chat");
+    const typingP = document.getElementById("typing");
+
+    function sendMsg() {
+      if (!msgInput.value) return;
+      socket.emit("chatMessage", {
+        from_user: username,
+        room: currentRoom,
+        message: msgInput.value
+      });
+      msgInput.value = "";
+    }
+
+    // Typing indicator
+    msgInput.oninput = () => {
+      socket.emit("typing", { room: currentRoom, username });
+    };
+
+    // Listen for messages
+    socket.on("message", (data) => {
+      chatDiv.innerHTML += `<p><strong>${data.from_user}:</strong> ${data.message}</p>`;
+      chatDiv.scrollTop = chatDiv.scrollHeight; // scroll to bottom
+      typingP.innerText = "";
+    });
+
+    // Listen for typing
+    socket.on("typing", (user) => {
+      typingP.innerText = user + " is typing...";
+    });
+
+    // Leave room
+    function leaveRoom() {
+      localStorage.removeItem("room");
+      window.location.href = "rooms.html";
+    }
+  </script>
+</body>
+</html>

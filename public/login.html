@@ -27,7 +27,7 @@ document.getElementById("loginForm").onsubmit = async (e)=>{
   if(res.ok){
     localStorage.setItem("user", data.username);
     alert("Login successful!");
-    window.location = "chat.html";
+    window.location = "rooms.html";
   } else {
     alert(data || "Login failed");
   }

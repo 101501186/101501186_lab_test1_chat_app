@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Select Room</title>
+</head>
+<body>
+  <h1>Welcome, <span id="user"></span></h1>
+  <h2>Select a Room to Join</h2>
+
+  <div id="rooms">
+    <button onclick="joinRoom('devops')">DevOps</button>
+    <button onclick="joinRoom('AI')">AI</button>
+    <button onclick="joinRoom('covid19')">Covid19</button>
+    <button onclick="joinRoom('sports')">Sports</button>
+    <button onclick="joinRoom('movies')">Movies</button>
+  </div>
+
+  <script>
+    // Display logged-in username
+    const user = localStorage.getItem("user");
+    if (!user) {
+      alert("Please login first");
+      window.location.href = "login.html";
+    }
+    document.getElementById("user").innerText = user;
+
+    function joinRoom(room) {
+      // Store selected room
+      localStorage.setItem("room", room);
+      // Redirect to chat page
+      window.location.href = "chat.html";
+    }
+  </script>
+</body>
+</html>
