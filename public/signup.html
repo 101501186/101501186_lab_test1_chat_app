@@ -1,47 +1,65 @@
-<form id="signupForm">
-<input id="username" placeholder="Username" required>
-<input id="firstname" placeholder="First name" required>
-<input id="lastname" placeholder="Last name" required>
-<input id="password" placeholder="Password" type="password" required>
-<button>Signup</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+  <!-- Link to your CSS file -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<p>Already have an account?</p>
-<button onclick="window.location.href='login.html'">
-  Go to Login
-</button>
+  <h1>Welcome to my Chat App</h1>
+  <form id="signupForm">
+    <input id="username" placeholder="Username" required>
+    <input id="firstname" placeholder="First name" required>
+    <input id="lastname" placeholder="Last name" required>
+    <input id="password" placeholder="Password" type="password" required>
+    <button>Signup</button>
+  </form>
 
-<script>
-document.getElementById("signupForm").onsubmit = async (e) => {
-  e.preventDefault();
+  <p>Already have an account?</p>
+  <button onclick="window.location.href='login.html'">
+    Go to Login
+  </button>
 
-  const btn = document.querySelector("button");
-  btn.disabled = true;
+  <script>
+    document.getElementById("signupForm").onsubmit = async (e) => {
+      e.preventDefault();
 
-  if (!username.value || !firstname.value || !lastname.value || !password.value) {
-  alert("Please fill in all fields");
-  return;
-  }
+      const btn = document.querySelector("button");
+      btn.disabled = true;
 
-  const res = await fetch("/signup", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      username: username.value,
-      firstname: firstname.value,
-      lastname: lastname.value,
-      password: password.value
-    })
-  });
+      if (!username.value || !firstname.value || !lastname.value || !password.value) {
+        alert("Please fill in all fields");
+        btn.disabled = false;
+        return;
+      }
 
-  const data = await res.json();
+      const res = await fetch("/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: username.value,
+          firstname: firstname.value,
+          lastname: lastname.value,
+          password: password.value
+        })
+      });
 
-  if (res.ok) {
-    alert("Signup successful! Redirecting to login...");
-    window.location.href = "login.html";   
-  } else {
-    alert(data.message || "Signup failed");
-  }
-};
-</script>
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Signup successful! Redirecting to login...");
+        window.location.href = "login.html";   
+      } else {
+        alert(data.message || "Signup failed");
+        btn.disabled = false;
+      }
+    };
+  </script>
+
+</body>
+</html>
+
 

@@ -1,36 +1,51 @@
-<form id="loginForm">
-<input id="username" placeholder="Username" required> 
-<input id="password" placeholder="Password" type="password" required>
-<button>Login</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<p>Don’t have an account?</p>
-<button onclick="window.location.href='signup.html'">
-  Go to Signup
-</button>
+  <h1>Welcome to my Chat App</h1>  
+  <form id="loginForm">
+    <input id="username" placeholder="Username" required> 
+    <input id="password" placeholder="Password" type="password" required>
+    <button>Login</button>
+  </form>
 
-<script>
-document.getElementById("loginForm").onsubmit = async (e)=>{
-  e.preventDefault();
+  <p>Don’t have an account?</p>
+  <button onclick="window.location.href='signup.html'">
+    Go to Signup
+  </button>
 
-  let res = await fetch("/login", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({ 
-      username: username.value, 
-      password: password.value 
-    })
-  });
+  <script>
+    document.getElementById("loginForm").onsubmit = async (e)=>{
+      e.preventDefault();
 
-  let data = await res.json();
+      let res = await fetch("/login", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ 
+          username: username.value, 
+          password: password.value 
+        })
+      });
 
-  if(res.ok){
-    localStorage.setItem("user", data.username);
-    alert("Login successful!");
-    window.location = "rooms.html";
-  } else {
-    alert(data || "Login failed");
-  }
-}
-</script>
+      let data = await res.json();
+
+      if(res.ok){
+        localStorage.setItem("user", data.username);
+        alert("Login successful!");
+        window.location = "rooms.html";
+      } else {
+        alert(data || "Login failed");
+      }
+    }
+  </script>
+
+</body>
+</html>
+
 

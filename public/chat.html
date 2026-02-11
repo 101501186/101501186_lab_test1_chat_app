@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Chat Room</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Welcome, <span id="username"></span></h1>
@@ -10,10 +13,11 @@
 
   <div id="chat" style="border:1px solid #000; height:300px; overflow-y:scroll; margin-top:10px; padding:5px"></div>
 
+  <p id="typing"></p>
+  
   <input id="msg" placeholder="Type a message">
   <button onclick="sendMsg()">Send</button>
 
-  <p id="typing"></p>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
