@@ -1,19 +1,36 @@
 <form id="loginForm">
-<input id="username">
-<input id="password" type="password">
+<input id="username" placeholder="Username" required> 
+<input id="password" placeholder="Password" type="password" required>
 <button>Login</button>
 </form>
 
+<p>Don’t have an account?</p>
+<button onclick="window.location.href='signup.html'">
+  Go to Signup
+</button>
+
 <script>
 document.getElementById("loginForm").onsubmit = async (e)=>{
- e.preventDefault();
- let res = await fetch("/login", {
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body: JSON.stringify({ username: username.value, password: password.value })
- });
- let data = await res.json();
- localStorage.setItem("user", data.username);
- window.location = "chat.html";
+  e.preventDefault();
+
+  let res = await fetch("/login", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ 
+      username: username.value, 
+      password: password.value 
+    })
+  });
+
+  let data = await res.json();
+
+  if(res.ok){
+    localStorage.setItem("user", data.username);
+    alert("Login successful!");
+    window.location = "chat.html";
+  } else {
+    alert(data || "Login failed");
+  }
 }
 </script>
+

@@ -1,24 +1,47 @@
 <form id="signupForm">
-<input id="username" placeholder="Username">
-<input id="firstname" placeholder="First name">
-<input id="lastname" placeholder="Last name">
-<input id="password" type="password">
+<input id="username" placeholder="Username" required>
+<input id="firstname" placeholder="First name" required>
+<input id="lastname" placeholder="Last name" required>
+<input id="password" placeholder="Password" type="password" required>
 <button>Signup</button>
 </form>
 
+<p>Already have an account?</p>
+<button onclick="window.location.href='login.html'">
+  Go to Login
+</button>
+
 <script>
-document.getElementById("signupForm").onsubmit = async (e)=>{
- e.preventDefault();
- await fetch("/signup", {
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body: JSON.stringify({
-     username: username.value,
-     firstname: firstname.value,
-     lastname: lastname.value,
-     password: password.value
-   })
- });
- alert("Signup complete!");
-}
+document.getElementById("signupForm").onsubmit = async (e) => {
+  e.preventDefault();
+
+  const btn = document.querySelector("button");
+  btn.disabled = true;
+
+  if (!username.value || !firstname.value || !lastname.value || !password.value) {
+  alert("Please fill in all fields");
+  return;
+  }
+
+  const res = await fetch("/signup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      username: username.value,
+      firstname: firstname.value,
+      lastname: lastname.value,
+      password: password.value
+    })
+  });
+
+  const data = await res.json();
+
+  if (res.ok) {
+    alert("Signup successful! Redirecting to login...");
+    window.location.href = "login.html";   
+  } else {
+    alert(data.message || "Signup failed");
+  }
+};
 </script>
+
