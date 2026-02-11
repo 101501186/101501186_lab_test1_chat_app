@@ -22,29 +22,29 @@
   </div>
 
   <script>
-    // Get logged-in username
+    //Get logged-in username
     const user = localStorage.getItem("user");
 
-    // If not logged in, redirect to login
+    // if not logged in, redirect to login
     if (!user) {
       alert("Please login first");
       window.location.href = "login.html";
     }
 
-    // Display username
+    //Display username
     document.getElementById("user").innerText = user;
 
     // Logout functionality
     document.getElementById("logoutBtn").onclick = () => {
-      localStorage.removeItem("user"); // Clear user session
-      localStorage.removeItem("room"); // Clear selected room
-      window.location.href = "login.html"; // Redirect to login
+      localStorage.removeItem("user");
+      localStorage.removeItem("room");
+      window.location.href = "login.html"; 
     };
 
-    // Join room function
+    //join room function
     function joinRoom(room) {
-      localStorage.setItem("room", room); // Store selected room
-      window.location.href = "chat.html"; // Redirect to chat page
+      localStorage.setItem("room", room);
+      window.location.href = "chat.html"; 
     }
   </script>
 </body>
